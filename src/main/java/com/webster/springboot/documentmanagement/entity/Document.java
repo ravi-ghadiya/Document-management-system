@@ -18,25 +18,13 @@ public class Document {
 
 //    @Lob
 //    private byte[] data;
-
-    //TODO: string docPath;   --> /resource/document/filename
+    
     @Column(name = "doc_path")
     private String docPath;
 
     @Column(name = "user_id")
     private Long userId;
 
-
-//    @NotEmpty
-//    @Column(name = "download_path")
-//    private String downloadPath;
-
-    //    @ManyToOne
-//    @JoinColumn(name = "fromuser_documents")
-
-
-//    @ManyToMany
-//    private List<User> toUser;
 
     public Document() {
     }

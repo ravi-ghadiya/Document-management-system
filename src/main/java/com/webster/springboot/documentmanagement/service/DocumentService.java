@@ -222,31 +222,32 @@ public class DocumentService {
 
         Document document = documentRepository.findByDocNameAndUserId(filename, session.getUserId());
 
-        if (document != null) {
-            if (session.isActive()) {
-                if (session.getUserId().equals(document.getUserId())) {
-                    Path path = Paths.get(UPLOAD_DIR + File.separator + filename);
-
-                    try {
-                        // Delete file or directory
-                        Files.delete(path);
-                        flag = true;
-                        System.out.println("File or directory deleted successfully");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    if (flag) {
-                        Document docToDelete = documentRepository.findByUserIdAndDocName(session.getUserId(), filename);
-                        documentRepository.delete(docToDelete);
-                        return ResponseEntity.status(HttpStatus.OK).body("document Deleted Successfully: " + docToDelete.getDocName());
-                    }
-                }
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("This user is not authorized to delete this document : " + filename);
-            }
+        if (document == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No document present with this name : " + filename + " related to current user");
+        }
+        if (!session.isActive()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No Active User session!");
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No document present with this name : " + filename + " related to current user");
+        if (!session.getUserId().equals(document.getUserId())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("This user is not authorized to delete this document : " + filename);
+        }
+        Path path = Paths.get(UPLOAD_DIR + File.separator + filename);
+
+        try {
+            // Delete file or directory
+            Files.delete(path);
+            flag = true;
+            System.out.println("File or directory deleted successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (flag) {
+            Document docToDelete = documentRepository.findByUserIdAndDocName(session.getUserId(), filename);
+            documentRepository.delete(docToDelete);
+            return ResponseEntity.status(HttpStatus.OK).body("document Deleted Successfully: " + docToDelete.getDocName());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("This user is not authorized to delete this document : " + filename);
     }
 
     public ResponseEntity shareDocument(Long toUserId, Long documentId, String sessionId) {
@@ -454,7 +455,7 @@ public class DocumentService {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No Active user session");
         }
         if (linkShareDocument == null) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Invalid link, no document present with this link!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid link, no document present with this link!");
         }
 
         if (session.getUserId().equals(linkShareDocument.getUserId()) || (session.getUserId().equals(linkShareDocument.getToUserId()) && linkShareDocument.isActive())) {

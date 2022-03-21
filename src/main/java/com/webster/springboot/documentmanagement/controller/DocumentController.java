@@ -23,10 +23,6 @@ public class DocumentController {
     @PostMapping("/upload")
     public ResponseEntity<String> uploadDocument(@RequestParam MultipartFile file, @RequestHeader(HttpHeaders.AUTHORIZATION) String sessionId) {
 
-        //TODO session -> User
-        //TODO user --> UserId --> Now u can identity which user has uploaded this document
-        //TODO Save document with userId (Document table)
-
         ResponseEntity response = documentService.store(file, sessionId);
 
         return response;

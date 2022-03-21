@@ -33,8 +33,7 @@ public class UserController {
         ResponseEntity result = userService.logoutUser(sessionId);
         return result;
     }
-
-    //TODO LOGOUT ALL Session
+    
     @PostMapping("/logoutAllSessions")
     public ResponseEntity logoutAllUserSessions(@RequestHeader(HttpHeaders.AUTHORIZATION) String sessionId) {
         ResponseEntity result = userService.logoutAllUserSessions(sessionId);

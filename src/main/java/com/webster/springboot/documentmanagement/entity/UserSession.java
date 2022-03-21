@@ -8,7 +8,6 @@ import java.util.Date;
 
 @Entity
 public class UserSession {
-    //id,userid,sessionUID,isactive,createaat,upldateat
 
     public static UserSession of(Long userId, String sessionId) {
         UserSession session = new UserSession();

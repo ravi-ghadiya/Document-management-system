@@ -59,7 +59,6 @@ public class UserService {
             User savedUser = userRepository.save(newUser);
             System.out.println("User Registered with Id: " + savedUser.getId());
 
-            //TODO register Login page (Response same as login API)
             UserSession session = UserSession.of(savedUser.getId(), UUID.randomUUID().toString());
 
             sessionRepository.save(session);
@@ -102,22 +101,13 @@ public class UserService {
 
                 return ResponseEntity.status(HttpStatus.OK).body(payload);
 
-//                httpSession = request.getSession();
-//                httpSession.setAttribute("user", user);
-//                request.getSession().setAttribute("user", user);
-
-
-//                return "user logged in successfully\n" + user.getId();
             }
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("incorrect password, kindly try again!");
-//            return "incorrect password, kindly try again!";
 
         } else {
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("error logging in!");
-//            return "error logging in!";
-
 
         }
     }
@@ -125,10 +115,8 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ResponseEntity logoutUser(String sessionId) {
         if (!StringUtils.hasText(sessionId)) {
-            //TODO requesyrinedId(401)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No User session present!");
         }
-        //TODO UserSession --> Get sesion -> isactive ->true active false --> updateat update --> false error(401)
 
         UserSession session = sessionRepository.findBySessionId(sessionId);
         if (session.isActive()) {
@@ -137,16 +125,12 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.OK).body("user logged out " + session.getUserId());
         }
 
-//        httpSession = request.getSession();
-//        User user = (User) httpSession.getAttribute("user");
-//        httpSession.invalidate();
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("error in logging out the user!" + session.getUserId());
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ResponseEntity logoutAllUserSessions(String sessionId) {
         if (!StringUtils.hasText(sessionId)) {
-            //TODO requesyrinedId(401)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No User session present!");
         }
 
@@ -163,31 +147,4 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body("all user sessions logged out for user : " + userId);
     }
 
-
-//    @Transactional
-//    public void save(User user) {
-//        String encodedPassword = passwordEncoder.encode(user.getPassword());
-//        user.setPassword(encodedPassword);
-//        userRepository.save(user);
-//    }
-//
-//    @Transactional
-//    public List<User> findAll() {
-//        List<User> usersList = userRepository.findAll();
-//        return usersList;
-//    }
-//
-//    @Transactional
-//    public User findUserByEmail(String email) {
-//        User users = userRepository.findByEmail(email);
-//        return users;
-//    }
-//
-//    @Transactional
-//    public User findByEmailAndPassword(String email, String password) {
-//
-//        passwordEncoder.matches(password, )
-//        User user = userRepository.findByEmailAndPassword(email, password);
-//        return user;
-//    }
 }
