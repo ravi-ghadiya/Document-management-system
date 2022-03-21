@@ -60,12 +60,12 @@ public class UserService {
             System.out.println("User Registered with Id: " + savedUser.getId());
 
             //TODO register Login page (Response same as login API)
-            UserSession session = UserSession.of(newUser.getId(), UUID.randomUUID().toString());
+            UserSession session = UserSession.of(savedUser.getId(), UUID.randomUUID().toString());
 
             sessionRepository.save(session);
 
             Map<String, Object> payload = new HashMap<>();
-            payload.put("user", newUser);
+            payload.put("user", savedUser);
             payload.put("session", session);
 
             return ResponseEntity.status(HttpStatus.OK).body(payload);

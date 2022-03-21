@@ -2,7 +2,6 @@ package com.webster.springboot.documentmanagement.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
@@ -23,7 +22,7 @@ public class User {
     private String email;
 
     @NotBlank(message = "Required field")
-    @Size(min = 8, message = "minimum password length must be 8 characters!")
+//    @Size(min = 8, message = "minimum password length must be 8 characters!")
     @Column(name = "password")
     private String password;
 
