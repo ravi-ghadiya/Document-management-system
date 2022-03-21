@@ -91,11 +91,6 @@ public class DocumentService {
 
             flag = true;
 
-//            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-//                    .path("/documents//")
-//                    .path(fileName)
-//                    .toUriString();
-
 
             if (flag) {
                 Document document = new Document();
@@ -280,16 +275,15 @@ public class DocumentService {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("This user is not authorized to share this document");
     }
 
-    //---------new code----------------------------------
     public ResponseEntity uploadSharedDocument(String link, String sessionId) {
         LinkShareDocument linkShareDocument = linkShareDocumentRepository.findByLink(link);
 
         UserSession session = sessionRepository.findBySessionId(sessionId);
         Long userId = session.getUserId();
 
-//        if (!session.isActive()) {
-//            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No Active user session");
-//        }
+        if (!session.isActive()) {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No Active user session");
+        }
         if (linkShareDocument == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Invalid link, no document present with this link!");
         }
@@ -345,11 +339,6 @@ public class DocumentService {
 
 
                 flag = true;
-
-//            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-//                    .path("/documents//")
-//                    .path(fileName)
-//                    .toUriString();
 
 
                 if (flag) {
